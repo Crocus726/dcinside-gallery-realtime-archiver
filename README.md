@@ -1,1 +1,2 @@
-# dcinside-gallery-realtime-archiver
+# 디시인사이드 갤러리 실시간 아카이빙
+디시인사이드 갤러리의 게시글을 실시간으로 PDF 변환하여 컴퓨터에 저장하는 Python 코드입니다.

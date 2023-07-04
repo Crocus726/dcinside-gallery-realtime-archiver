@@ -6,5 +6,5 @@
 * wkhtmltopdf 0.12.6
 
 ## 사용 설명
-갤러리 ID와 글 번호는 해당 갤러리의 게시글 URL(PC 버전으로 접속)을 통해 알 수 있습니다.
+갤러리 ID와 글 번호는 해당 갤러리의 게시글 URL(PC 버전으로 접속)을 통해 알 수 있습니다.  
 `https://gall.dcinside.com/mgallery/board/view/?id={갤러리 ID}&no={글 번호}`

@@ -1,4 +1,3 @@
-# TEST CODE, STILL WRITING
 import requests
 import time
 from bs4 import BeautifulSoup
@@ -11,11 +10,9 @@ headers = {
 
 gall_id = input("갤러리의 ID를 입력해주세요: ") # 갤러리 ID를 입력받음(예: )
 
-default_link = 'https://gall.dcinside.com/board/lists/?id='
+default_link = 'https://gall.dcinside.com/board/'
 
-req = requests.get(default_link + gall_id, headers = headers)
-
-print(req.status_code)
+req = requests.get(default_link + 'lists/?id=' + gall_id, headers = headers)
 
 # 정갤 마갤 구분(URL 적을 때 필요함)
 if 'location.replace' in req.text:
@@ -38,20 +35,27 @@ config = pdfkit.configuration(wkhtmltopdf = path_wkhtmltopdf)
 
 # 프로그램을 종료할 때까지 계속 반복함
 while True:
-    time.sleep(1) # 실행 전 1초 지연
+    time.sleep(5) # 실행 전 5초 지연
 
-    req = requests.get(default_link + gall_id, headers = headers)
+    req = requests.get(default_link + 'lists/?id=' + gall_id, headers = headers)
     soup = BeautifulSoup(req.content, 'html.parser')
     gall_num_tags = soup.find_all(attrs = {'class': 'gall_num'}) # class가 'gall_num'인 태그 찾아서 gall_num_tags에 저장함
-    gall_num_array = []
+    gall_num_array = [] # 
     
-    #
+    # 
     for tag in gall_num_tags:
         gall_num_array.append(int(tag.get_text()))
     
     gall_num_array.sort()
     recent_num = gall_num_array[-1]
+    #print('recent_num = ' + str(recent_num))
 
     if(recent_num > now_num):
-        for i in range(recent_num - now_num):
-            pdfkit.from_url('https://gall.dcinside.com/mgallery/board/view/?id=elsa&no=' + 번호, 'sample.pdf', configuration = config) # URL을 통해 접속한 웹 페이지를 PDF로 저장함
+        for num in range(recent_num - now_num):
+            #print(default_link + 'view/?id=' + gall_id + '&no=' + str(now_num + 1))
+            try:
+                pdfkit.from_url(default_link + 'view/?id=' + gall_id + '&no=' + str(now_num + 1), gall_id + '_' + str(now_num + 1) + '.pdf', configuration = config) # URL을 통해 접속한 웹 페이지를 PDF로 저장함
+            except:
+                pass
+            print(str(now_num + 1) + '번째 게시글을 저장했습니다.')
+            now_num += 1

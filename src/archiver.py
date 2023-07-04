@@ -17,10 +17,8 @@ req = requests.get(default_link + 'lists/?id=' + gall_id, headers = headers)
 # 정갤 마갤 구분(URL 적을 때 필요함)
 if 'location.replace' in req.text:
     default_link = default_link.replace('board/', 'mgallery/board/') # 갤러리 URL을 변경함
-    gall_type = 'minor'
     print("마이너 갤러리로 인식되었습니다.")
 elif req.status_code == 200:
-    gall_type = 'major'
     print("정식(메이저) 갤러리로 인식되었습니다.")
 else:
     print("해당 갤러리를 찾을 수 없습니다.")
@@ -37,7 +35,7 @@ config = pdfkit.configuration(wkhtmltopdf = path_wkhtmltopdf)
 while True:
     time.sleep(5) # 실행 전 5초 지연
 
-    req = requests.get(default_link + 'lists/?id=' + gall_id, headers = headers)
+    req = requests.get(default_link + 'lists/?id=' + gall_id + '&list_num=30', headers = headers)
     soup = BeautifulSoup(req.content, 'html.parser')
     gall_num_tags = soup.find_all(attrs = {'class': 'gall_num'}) # class가 'gall_num'인 태그 찾아서 gall_num_tags에 저장함
     gall_num_array = [] # 
@@ -55,7 +53,7 @@ while True:
             #print(default_link + 'view/?id=' + gall_id + '&no=' + str(now_num + 1))
             try:
                 pdfkit.from_url(default_link + 'view/?id=' + gall_id + '&no=' + str(now_num + 1), gall_id + '_' + str(now_num + 1) + '.pdf', configuration = config) # URL을 통해 접속한 웹 페이지를 PDF로 저장함
-            except:
+            except: # Qt 폰트 관련 오류가 항상 발생하는데 그냥 무시함
                 pass
             print(str(now_num + 1) + '번째 게시글을 저장했습니다.')
             now_num += 1

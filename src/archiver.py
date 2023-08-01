@@ -45,12 +45,21 @@ while True:
     gall_num_array.sort() # 오름차순 정렬
 
     # 가장 최신 글 번호를 확인하고, 현재 PDF 변환이 진행 중인 글 번호보다 크면 PDF 변환을 시작함
-    recent_num = gall_num_array[-1]
+    recent_num = gall_num_array[-1] # 삭제된 게시글이 있을경우를 대비할 것(최근 게시글 번호 저장해놓고, 측정한 것과 비교)
+    
     if(recent_num > now_num):
+        print(recent_num - now_num, end = "")
+        print("개의 새로운 게시글이 있습니다.")
         for num in range(recent_num - now_num):
+            start_time = time.time()
             try:
                 pdfkit.from_url(default_link + 'view/?id=' + gall_id + '&no=' + str(now_num + 1), gall_id + '_' + str(now_num + 1) + '.pdf', configuration = config) # URL을 통해 접속한 웹 페이지를 PDF로 저장함
             except: # Qt 폰트 관련 오류가 항상 발생하는데 그냥 무시함
                 pass
-            print(str(now_num + 1) + '번째 게시글을 저장했습니다.')
+            print(str(now_num + 1) + '번 게시글을 저장했습니다.', end = " ")
+            end_time = time.time()
+            print(round(end_time - start_time, 2), end = "")
+            print("초 소요되었습니다.")
             now_num += 1
+
+# 평균 447 KB

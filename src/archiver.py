@@ -34,7 +34,12 @@ config = pdfkit.configuration(wkhtmltopdf = path_wkhtmltopdf)
 while True:
     time.sleep(5)
 
-    req = requests.get(default_link + 'lists/?id=' + gall_id + '&list_num=30', headers = headers)
+    try:
+        req = requests.get(default_link + 'lists/?id=' + gall_id + '&list_num=30', headers = headers)
+    except:
+        print("최신 게시글 번호 불러오기에 실패했습니다. 1회 재시도합니다.")
+        req = requests.get(default_link + 'lists/?id=' + gall_id + '&list_num=30', headers = headers)
+    
     soup = BeautifulSoup(req.content, 'html.parser')
     gall_num_tags = soup.find_all(attrs = {'class': 'gall_num'}) # class가 'gall_num'인 태그를 찾아서 저장함
     
@@ -61,5 +66,3 @@ while True:
             print(round(end_time - start_time, 2), end = "")
             print("초 소요되었습니다.")
             now_num += 1
-
-# 평균 447 KB
